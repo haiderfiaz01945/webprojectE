@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchProducts } from '../../firebaseService';
+import { useCart } from '../Componenets/CartContext';
 
 const Watches = () => {
   const [Watches, setWatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
-  // Fetch products from Firebase and filter for Watches
   const loadProducts = async () => {
     try {
-      const data = await fetchProducts(); // Your Firebase fetch function
-      const WatchesData = data.filter(product => product.category === "Watch ");
+      const data = await fetchProducts();
+      const WatchesData = data.filter(
+        product => product.category?.trim().toLowerCase() === "watch"
+      );
       setWatches(WatchesData);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -26,6 +29,17 @@ const Watches = () => {
 
   const handleProductClick = (productId) => {
     navigate(`/product/${productId}`);
+  };
+
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation();
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      category: product.category
+    });
   };
 
   if (loading) {
@@ -47,8 +61,8 @@ const Watches = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Our Shoe Collection</h1>
-      
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">Our Watch Collection</h1>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {Watches.map((shoe) => (
           <div 
@@ -70,10 +84,7 @@ const Watches = () => {
                 <span className="text-lg font-bold text-blue-600">${shoe.price}</span>
                 <button 
                   className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    // Add to cart logic here
-                  }}
+                  onClick={(e) => handleAddToCart(e, shoe)}
                 >
                   Add to Cart
                 </button>

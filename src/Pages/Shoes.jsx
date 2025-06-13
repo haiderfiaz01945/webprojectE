@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchProducts } from '../../firebaseService';
+import { useCart } from '../Componenets/CartContext';
 
 const Shoes = () => {
   const [shoes, setShoes] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
-  // Fetch products from Firebase and filter for shoes
   const loadProducts = async () => {
     try {
-      const data = await fetchProducts(); // Your Firebase fetch function
+      const data = await fetchProducts();
       const shoesData = data.filter(product => product.category === "Shoes");
       setShoes(shoesData);
     } catch (error) {
@@ -26,6 +27,17 @@ const Shoes = () => {
 
   const handleProductClick = (productId) => {
     navigate(`/product/${productId}`);
+  };
+
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation();
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      category: product.category
+    });
   };
 
   if (loading) {
@@ -48,7 +60,6 @@ const Shoes = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-8">Our Shoe Collection</h1>
-      
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {shoes.map((shoe) => (
           <div 
@@ -70,10 +81,7 @@ const Shoes = () => {
                 <span className="text-lg font-bold text-blue-600">${shoe.price}</span>
                 <button 
                   className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    // Add to cart logic here
-                  }}
+                  onClick={(e) => handleAddToCart(e, shoe)}
                 >
                   Add to Cart
                 </button>
