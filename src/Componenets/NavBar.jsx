@@ -243,6 +243,8 @@ export default function NavBar() {
                 <Link
                   to="/cart"
                   className="block rounded-lg px-3 py-2.5 text-base font-semibold text-[#EEEEEE] hover:bg-[#393E46] flex items-center gap-2"
+              onClick={() => setMobileMenuOpen(false)}
+
                 >
                   <ShoppingCartIcon className="h-5 w-5 text-[#00ADB5]" />
                   Cart ({cartCount})
