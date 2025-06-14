@@ -1,20 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { fetchProducts } from '../../firebaseService';
 import { useCart } from '../Componenets/CartContext';
 
-const Phones = () => {
-  const [phones, setPhones] = useState([]);
+const ItemsPage = () => {
+  const { category } = useParams();
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { addToCart } = useCart();
 
-  // Fetch products from Firebase and filter for Phones
+  useEffect(() => {
+console.log(category)
+
   const loadProducts = async () => {
     try {
       const data = await fetchProducts();
-      const phonesData = data.filter(product => product.category === "Phones");
-      setPhones(phonesData);
+      
+     
+      const filtered = data.filter(
+        product =>
+          product.category &&
+          product.category.toLowerCase() === category.toLowerCase()
+      );
+      setItems(filtered);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -22,26 +31,23 @@ const Phones = () => {
     }
   };
 
-  useEffect(() => {
-    loadProducts();
-  }, []);
+  loadProducts();
+}, [category]);
+
 
   const handleProductClick = (productId) => {
     navigate(`/product/${productId}`);
   };
 
   const handleAddToCart = (e, product) => {
-
     e.stopPropagation();
-   addToCart({
-  id: product.id,
-  name: product.name,
-  price: product.price,
-  image: product.image,
-  category: product.category
-});
-
-
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      category: product.category
+    });
   };
 
   if (loading) {
@@ -52,10 +58,10 @@ const Phones = () => {
     );
   }
 
-  if (phones.length === 0) {
+  if (items.length === 0) {
     return (
       <div className="text-center py-12">
-        <h3 className="text-xl font-medium text-gray-700">No phones available</h3>
+        <h3 className="text-xl font-medium text-gray-700">No {category} available</h3>
         <p className="text-gray-500 mt-2">Check back later for new arrivals</p>
       </div>
     );
@@ -63,30 +69,29 @@ const Phones = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Our Phone Collection</h1>
-      
+      <h1 className="text-3xl font-bold text-gray-800 mb-8 capitalize">Our {category} Collection</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {phones.map((phone) => (
+        {items.map((item) => (
           <div 
-            key={phone.id} 
+            key={item.id} 
             className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
-            onClick={() => handleProductClick(phone.id)}
+            onClick={() => handleProductClick(item.id)}
           >
             <div className="h-64 overflow-hidden">
               <img 
-                src={phone.image} 
-                alt={phone.name} 
+                src={item.image} 
+                alt={item.name} 
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
               />
             </div>
             <div className="p-4">
-              <h3 className="text-lg font-semibold text-gray-800 mb-1">{phone.name}</h3>
-              <p className="text-gray-600 text-sm mb-2">{phone.category}</p>
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">{item.name}</h3>
+              <p className="text-gray-600 text-sm mb-2">{item.category}</p>
               <div className="flex justify-between items-center mt-3">
-                <span className="text-lg font-bold text-blue-600">${phone.price.toFixed(2)}</span>
+                <span className="text-lg font-bold text-blue-600">${item.price}</span>
                 <button 
                   className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
-                  onClick={(e) => handleAddToCart(e, phone)}
+                  onClick={(e) => handleAddToCart(e, item)}
                 >
                   Add to Cart
                 </button>
@@ -99,4 +104,4 @@ const Phones = () => {
   );
 };
 
-export default Phones;
+export default ItemsPage;

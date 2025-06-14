@@ -35,7 +35,8 @@ export const fetchCartByEmail = async () => {
 
   const q = query(
     collection(db, CART_COLLECTION),
-    where("email", "==", user.email)
+    where("email",
+       "==", user.email)
   );
 
   const querySnapshot = await getDocs(q);
@@ -49,7 +50,7 @@ export const fetchCartByEmail = async () => {
 // Optional: add update and delete functions for completeness
 
 export const updateData = async (id, updatedData) => {
-  const docRef = doc(db, COLLECTION_NAME, id);
+  const docRef = doc(db, COLLECTION_NAME, id);   
   await updateDoc(docRef, updatedData);
 };
 

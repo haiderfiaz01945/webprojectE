@@ -129,13 +129,8 @@ export default function NavBar() {
               <HomeIcon className="h-5 w-5" />
               Home
             </Link>
-            <Link to="#" className="text-sm font-semibold leading-6 text-white hover:text-indigo-100 transition-colors flex items-center gap-1">
-              <BuildingOfficeIcon className="h-5 w-5" />
-              Company
-            </Link>
-            <Link to="/aboutus" className="text-sm font-semibold leading-6 text-white hover:text-indigo-100 transition-colors flex items-center gap-1">
-              About Us
-            </Link>
+ 
+             
             <Link to="/contactus" className="text-sm font-semibold leading-6 text-white hover:text-indigo-100 transition-colors flex items-center gap-1">
               <EnvelopeIcon className="h-5 w-5" />
               Contact
