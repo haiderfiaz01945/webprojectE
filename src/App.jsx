@@ -13,12 +13,12 @@ import ItemsPage from './Pages/ItemsPage';
 import ProductPage from './Pages/Product';
 import Orders from './Componenets/Orders';
 import { auth } from '../firebase';
-
 const App = () => {
   const [user, setUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(false);
 
-  const adminEmail = 'haiderfiaz09@gmail.com';
+  // ✅ Add both admin emails here
+  const adminEmails = ['haiderfiaz09@gmail.com', 'zainkammad@gmail.com'];
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -29,7 +29,8 @@ const App = () => {
     return () => unsubscribe();
   }, []);
 
-  const isAdmin = user?.email === adminEmail;
+  // ✅ Check if logged-in user is in adminEmails list
+  const isAdmin = adminEmails.includes(user?.email);
 
   if (!authChecked) {
     return (
@@ -51,7 +52,7 @@ const App = () => {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/product/:id" element={<ProductPage />} />
 
-        {/* ✅ Protected Routes (Only for admin email) */}
+        {/* ✅ Protected Routes */}
         <Route
           path="/orders"
           element={isAdmin ? <Orders /> : <Navigate to="/" replace />}
