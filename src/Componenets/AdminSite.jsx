@@ -11,7 +11,7 @@ const AdminSite = () => {
   });
   const [products, setProducts] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+ 
   // Categories with subcategories
   const categories = {
     'Phones': ['Smartphones', 'Accessories', 'Cases'],

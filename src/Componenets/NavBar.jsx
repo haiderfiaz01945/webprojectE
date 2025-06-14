@@ -54,12 +54,19 @@ const products = [
 export default function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [displayName, setDisplayName] = useState("Guest");
   const { cartCount = 0 } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      if (currentUser?.displayName) {
+        const firstName = currentUser.displayName.split(" ")[0];
+        setDisplayName(firstName);
+      } else {
+        setDisplayName("Guest");
+      }
     });
     return () => unsub();
   }, []);
@@ -67,6 +74,7 @@ export default function NavBar() {
   const handleLogout = async () => {
     await signOut(auth);
     setUser(null);
+    setDisplayName("Guest");
     navigate("/");
   };
 
@@ -74,33 +82,36 @@ export default function NavBar() {
     <header className="bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg">
       <nav className="mx-auto max-w-7xl px-6 py-4 lg:px-8">
         <div className="flex items-center justify-between">
+          {/* Branding */}
           <div className="flex lg:flex-1">
             <Link to="/" className="-m-1.5 p-1.5 flex items-center">
               <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center">
-                <span className="text-indigo-600 font-bold text-xl">YC</span>
+                <span className="text-indigo-600 font-bold text-xl">👋</span>
               </div>
-              <span className="ml-2 text-white font-bold text-xl">YourCart</span>
+              <span className="ml-2 text-white font-bold text-xl">
+                Hi, {displayName}
+              </span>
             </Link>
           </div>
 
+          {/* Mobile Menu Button */}
           <div className="flex lg:hidden">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-white"
             >
-              <span className="sr-only">Open main menu</span>
               <Bars3Icon className="h-6 w-6" />
             </button>
           </div>
 
+          {/* Desktop Menu */}
           <PopoverGroup className="hidden lg:flex lg:gap-x-8">
             <Popover className="relative">
               <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-white hover:text-indigo-100 transition-colors">
                 Products
                 <ChevronDownIcon className="h-5 w-5" />
               </PopoverButton>
-
               <PopoverPanel className="absolute -left-8 top-full z-10 mt-3 w-64 rounded-xl bg-white p-2 shadow-lg ring-1 ring-gray-900/5">
                 {products.map((item) => (
                   <div
@@ -111,12 +122,8 @@ export default function NavBar() {
                       <item.icon className="h-6 w-6 text-indigo-600 group-hover:text-indigo-700" />
                     </div>
                     <div>
-                      <Link
-                        to={item.to}
-                        className="block font-semibold text-gray-900"
-                      >
+                      <Link to={item.to} className=" font-semibold text-gray-900">
                         {item.name}
-                        <span className="absolute inset-0" />
                       </Link>
                       <p className="mt-1 text-gray-600">{item.description}</p>
                     </div>
@@ -125,18 +132,15 @@ export default function NavBar() {
               </PopoverPanel>
             </Popover>
 
-            <Link to="/" className="text-sm font-semibold leading-6 text-white hover:text-indigo-100 transition-colors flex items-center gap-1">
+            <Link to="/" className="text-sm font-semibold leading-6 text-white hover:text-indigo-100 flex items-center gap-1">
               <HomeIcon className="h-5 w-5" />
               Home
             </Link>
- 
+
              
-            <Link to="/contactus" className="text-sm font-semibold leading-6 text-white hover:text-indigo-100 transition-colors flex items-center gap-1">
-              <EnvelopeIcon className="h-5 w-5" />
-              Contact
-            </Link>
           </PopoverGroup>
 
+          {/* Desktop Right Section */}
           <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-6">
             <Link to="/cart" className="relative flex items-center gap-1 text-sm font-semibold leading-6 text-white hover:text-indigo-100">
               <ShoppingCartIcon className="h-5 w-5" />
@@ -157,10 +161,7 @@ export default function NavBar() {
                 Logout
               </button>
             ) : (
-              <Link
-                to="/login"
-                className="flex items-center gap-1 text-sm font-semibold leading-6 text-white hover:text-indigo-100"
-              >
+              <Link to="/login" className="flex items-center gap-1 text-sm font-semibold leading-6 text-white hover:text-indigo-100">
                 <UserCircleIcon className="h-5 w-5" />
                 Log in <span aria-hidden="true">&rarr;</span>
               </Link>
@@ -176,9 +177,11 @@ export default function NavBar() {
           <div className="flex items-center justify-between">
             <Link to="/" className="-m-1.5 p-1.5 flex items-center">
               <div className="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center">
-                <span className="text-white font-bold text-xl">YC</span>
+                <span className="text-white font-bold text-xl">👋</span>
               </div>
-              <span className="ml-2 text-gray-900 font-bold text-xl">YourCart</span>
+              <span className="ml-2 text-gray-900 font-bold text-xl">
+                Hi, {displayName}
+              </span>
             </Link>
             <button
               type="button"
@@ -202,7 +205,7 @@ export default function NavBar() {
                       <Link
                         key={item.name}
                         to={item.to}
-                        className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold text-gray-900 hover:bg-gray-50 flex gap-2 items-center"
+                        className="rounded-lg py-2 pl-6 pr-3 text-sm font-semibold text-gray-900 hover:bg-gray-50 flex gap-2 items-center"
                       >
                         <item.icon className="h-5 w-5 text-indigo-600" />
                         {item.name}
@@ -211,31 +214,19 @@ export default function NavBar() {
                   </DisclosurePanel>
                 </Disclosure>
 
-                <Link to="/" className="block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50 flex items-center gap-2">
+                <Link to="/" className="rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50 flex items-center gap-2">
                   <HomeIcon className="h-5 w-5" />
                   Home
                 </Link>
 
-                <Link to="#" className="block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50 flex items-center gap-2">
-                  <BuildingOfficeIcon className="h-5 w-5" />
-                  Company
-                </Link>
-
-                <Link to="/aboutus" className="block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">
-                  About Us
-                </Link>
-
-                <Link to="/contactus" className="block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50 flex items-center gap-2">
-                  <EnvelopeIcon className="h-5 w-5" />
-                  Contact Us
-                </Link>
+                 
               </div>
 
               <div className="py-6">
                 {user ? (
                   <button
                     onClick={handleLogout}
-                    className="w-full text-left block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50 flex items-center gap-2"
+                    className="w-full text-left rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50 flex items-center gap-2"
                   >
                     <UserCircleIcon className="h-5 w-5" />
                     Logout
@@ -243,7 +234,7 @@ export default function NavBar() {
                 ) : (
                   <Link
                     to="/login"
-                    className="block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50 flex items-center gap-2"
+                    className="rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50 flex items-center gap-2"
                   >
                     <UserCircleIcon className="h-5 w-5" />
                     Log in
@@ -252,7 +243,7 @@ export default function NavBar() {
 
                 <Link
                   to="/cart"
-                  className="mt-2 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50 flex items-center gap-2"
+                  className="mt-2 rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50 flex items-center gap-2"
                 >
                   <ShoppingCartIcon className="h-5 w-5" />
                   Cart ({cartCount})
