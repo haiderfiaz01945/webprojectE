@@ -19,7 +19,6 @@ import {
   DevicePhoneMobileIcon,
   ShoppingBagIcon,
   HomeIcon,
-  BuildingOfficeIcon,
   EnvelopeIcon,
   UserCircleIcon,
   ShoppingCartIcon,
@@ -122,7 +121,10 @@ export default function NavBar() {
                       <item.icon className="h-6 w-6 text-indigo-600 group-hover:text-indigo-700" />
                     </div>
                     <div>
-                      <Link to={item.to} className=" font-semibold text-gray-900">
+                      <Link 
+ 
+                      
+                      to={item.to} className=" font-semibold text-gray-900">
                         {item.name}
                       </Link>
                       <p className="mt-1 text-gray-600">{item.description}</p>
@@ -203,6 +205,7 @@ export default function NavBar() {
                   <DisclosurePanel className="mt-2 space-y-2">
                     {products.map((item) => (
                       <Link
+                      onClick={() => setMobileMenuOpen(false)} // 👈 Add this
                         key={item.name}
                         to={item.to}
                         className="rounded-lg py-2 pl-6 pr-3 text-sm font-semibold text-gray-900 hover:bg-gray-50 flex gap-2 items-center"
@@ -214,7 +217,9 @@ export default function NavBar() {
                   </DisclosurePanel>
                 </Disclosure>
 
-                <Link to="/" className="rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50 flex items-center gap-2">
+                <Link 
+                onClick={() => setMobileMenuOpen(false)} // 👈 Add this
+                to="/" className="rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50 flex items-center gap-2">
                   <HomeIcon className="h-5 w-5" />
                   Home
                 </Link>
