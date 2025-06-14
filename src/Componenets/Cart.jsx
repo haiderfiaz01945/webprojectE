@@ -188,12 +188,14 @@ const Cart = () => {
                   </div>
                 </div>
               </div>
-              <button
-                className="w-full mt-6 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
-                disabled={cartItems.length === 0 || isProcessing}
-              >
-                {isProcessing ? 'Processing...' : 'Checkout'}
-              </button>
+             <button
+  className="w-full mt-6 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+  disabled={cartItems.length === 0 || isProcessing}
+  onClick={() => navigate('/checkout')}
+>
+  {isProcessing ? 'Processing...' : 'Checkout'}
+</button>
+
             </div>
           </div>
         </div>

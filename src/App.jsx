@@ -9,6 +9,7 @@ import Phones from './Pages/Phones';
 import Cart from './Componenets/Cart';
 import Login from './Pages/Login';
 import Signup from './Componenets/SignUp';
+import Checkout from './Pages/Checkout';
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/Cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/checkout" element={<Checkout />} />
 
       </Routes>
     </Router>

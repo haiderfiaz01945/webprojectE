@@ -3,15 +3,17 @@ import { db } from "./firebase";
 
 const COLLECTION_NAME = "Products";  // use a constant for reusability
 const CART_COLLECTION = "Cart";  // use a constant for reusability
-
+const CHECKOUT_COLLECTION = "Checkout"
 export const addData = async (product) => {
   await addDoc(collection(db, COLLECTION_NAME), product);
 };
 
 
-
+export const addDataCheckout = async (product) => {
+  await addDoc(collection(db, CHECKOUT_COLLECTION), product);
+};
 export const addDataCart = async (product) => {
-  await addDoc(collection(db, CART_COLLECTION), product);
+  await addDoc(collection(db, CHECKOUT_COLLECTION), product);
 };
 
 
