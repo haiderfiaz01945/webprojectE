@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { addData, fetchProducts } from '../../firebaseService';
 
 const AdminSite = () => {
@@ -11,8 +12,7 @@ const AdminSite = () => {
   });
   const [products, setProducts] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
- 
-  // Categories with subcategories
+
   const categories = {
     'Phones': ['Smartphones', 'Accessories', 'Cases'],
     'Watches': ['Smart Watches', 'Analog', 'Digital'],
@@ -38,15 +38,14 @@ const AdminSite = () => {
     setProduct(prev => ({
       ...prev,
       [name]: value,
-      // Reset subcategory when changing main category
       ...(name === 'category' ? { subcategory: '' } : {})
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, price, image, category, subcategory } = product;
-    
+    const { name, price, image, category } = product;
+
     if (!name || !price || !image || !category) {
       alert('Please fill all required fields');
       return;
@@ -56,7 +55,7 @@ const AdminSite = () => {
     try {
       await addData({
         ...product,
-        price: parseFloat(price) // Ensure price is a number
+        price: parseFloat(price)
       });
       setProduct({ name: '', price: '', image: '', category: '', subcategory: '' });
       await loadProducts();
@@ -70,7 +69,7 @@ const AdminSite = () => {
   return (
     <div className="max-w-6xl mx-auto mt-10 p-6 bg-gray-50 rounded-lg shadow-md">
       <h2 className="text-3xl font-bold mb-6 text-center text-indigo-700">Product Management</h2>
-      
+
       {/* Add Product Form */}
       <div className="bg-white p-6 rounded-lg shadow mb-10">
         <h3 className="text-xl font-semibold mb-4 text-gray-800">Add New Product</h3>
@@ -154,6 +153,16 @@ const AdminSite = () => {
             )}
           </div>
 
+          {/* View Orders Button */}
+          <div className="mt-6 text-right">
+            <Link
+              to="/orders"
+              className="inline-block bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-semibold py-2 px-4 rounded-md shadow"
+            >
+              📦 View Orders
+            </Link>
+          </div>
+
           <button
             type="submit"
             disabled={isSubmitting}
@@ -167,7 +176,7 @@ const AdminSite = () => {
       {/* Product List */}
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-xl font-semibold mb-6 text-gray-800">Product Inventory</h3>
-        
+
         {products.length === 0 ? (
           <div className="text-center py-10">
             <p className="text-gray-500">No products found. Add some products to get started.</p>

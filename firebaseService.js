@@ -16,6 +16,14 @@ export const addDataCart = async (product) => {
   await addDoc(collection(db, CHECKOUT_COLLECTION), product);
 };
 
+export const fetchCheckout = async () => {
+  const querySnapshot = await getDocs(collection(db, CHECKOUT_COLLECTION));
+  return querySnapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+};
+
 
 export const fetchProducts = async () => {
   const querySnapshot = await getDocs(collection(db, COLLECTION_NAME));

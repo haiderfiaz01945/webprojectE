@@ -112,7 +112,7 @@ export default function NavBar() {
                 Products
                 <ChevronDownIcon className="h-5 w-5" />
               </PopoverButton>
-              <PopoverPanel className="absolute -left-8 top-full z-10 mt-3 w-64 rounded-xl bg-white p-2 shadow-lg ring-1 ring-gray-900/5">
+              <PopoverPanel className="absolute -left-8 top-full z-50 mt-3 w-64 rounded-xl bg-white p-2 shadow-lg ring-1 ring-gray-900/5">
                 {products.map((item) => (
                   <div
                     key={item.name}
