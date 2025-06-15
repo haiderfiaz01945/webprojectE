@@ -12,7 +12,6 @@ import {
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../firebase";
-import { useNavigate } from "react-router-dom";
 
 const CartContext = createContext();
 const CART_COLLECTION = "Cart";

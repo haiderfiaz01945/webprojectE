@@ -18,7 +18,7 @@ const Cart = () => {
       setUser(currentUser);
       setAuthChecking(false);
       if (!currentUser) {
-        navigate('/login', { state: { from: '/cart' } });
+        navigate('/login');
       }
     });
     return unsubscribe;

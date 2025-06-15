@@ -55,6 +55,7 @@ export default function NavBar() {
   const [user, setUser] = useState(null);
   const [displayName, setDisplayName] = useState("Guest");
   const { cartCount = 0 } = useCart();
+  const [avatar , setAvatar]=useState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function NavBar() {
       if (currentUser?.displayName) {
         const firstName = currentUser.displayName.split(" ")[0];
         setDisplayName(firstName);
+        setAvatar(currentUser.photoURL)
       } else {
         setDisplayName("Guest");
       }
@@ -83,14 +85,19 @@ export default function NavBar() {
         <div className="flex items-center justify-between h-16">
           {/* Branding */}
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center">
-              <div className="h-9 w-9 rounded-full bg-[#00ADB5] flex items-center justify-center">
-                <span className="text-white font-bold text-lg">👋</span>
-              </div>
-              <span className="ml-2 text-white font-bold text-lg hidden sm:block">
-                Hi, {displayName}
-              </span>
-            </Link>
+           <Link to="/" className="flex-shrink-0 flex items-center">
+  <div className="h-9 w-9 rounded-full bg-[#00ADB5] overflow-hidden flex items-center justify-center">
+    {avatar ? (
+      <img src={avatar} alt="User Avatar" className="h-full w-full object-cover" />
+    ) : (
+      <span className="text-white text-xl">👋</span>
+    )}
+  </div>
+
+  <span className="ml-2 text-white font-bold text-lg hidden sm:block">
+    Hi, {displayName}
+  </span>
+</Link>
           </div>
 
           {/* Desktop Menu */}

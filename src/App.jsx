@@ -18,10 +18,11 @@ const App = () => {
   const [authChecked, setAuthChecked] = useState(false);
 
   // ✅ Add both admin emails here
-  const adminEmails = ['haiderfiaz09@gmail.com', 'zainkammad@gmail.com',"namratariq20@gmail.com"];
+  const adminEmails = ['haiderfiaz09@gmail.com',"namratariq20@gmail.com"];
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log(currentUser)
       setUser(currentUser);
       setAuthChecked(true);
     });
