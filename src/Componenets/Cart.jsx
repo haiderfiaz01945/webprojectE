@@ -65,103 +65,95 @@ const Cart = () => {
 
   if (authChecking) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-[#222831]">
-        <div className="text-center">
-          <div className="inline-block h-12 w-12 border-4 border-[#00ADB5] border-t-transparent rounded-full animate-spin"></div>
-          <p className="mt-4 text-[#EEEEEE]">Checking authentication...</p>
-        </div>
+      <div className="cart-loading-container">
+        <div className="cart-loading-spinner"></div>
+        <p className="cart-loading-text">Checking authentication...</p>
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-[#222831]">
-        <div className="text-center">
-          <div className="inline-block h-12 w-12 border-4 border-[#00ADB5] border-t-transparent rounded-full animate-spin"></div>
-          <p className="mt-4 text-[#EEEEEE]">Redirecting to login...</p>
-        </div>
+      <div className="cart-loading-container">
+        <div className="cart-loading-spinner"></div>
+        <p className="cart-loading-text">Redirecting to login...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#222831] py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="cart-container">
+      <div className="cart-inner-container">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="cart-header">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center text-[#00ADB5] hover:text-[#008E9B] transition-colors"
+            className="cart-back-button"
           >
-            <FiArrowLeft className="mr-2" />
+            <FiArrowLeft className="cart-back-icon" />
             Continue Shopping
           </button>
-          <h1 className="text-3xl font-bold text-[#EEEEEE]">Your Shopping Cart</h1>
-          <div className="w-24"></div> {/* Spacer for alignment */}
+          <h1 className="cart-title">Your Shopping Cart</h1>
+          <div className="cart-header-spacer"></div>
         </div>
 
         {cartItems.length === 0 ? (
-          <div className="text-center py-16 bg-[#393E46] rounded-xl">
-            <div className="mx-auto w-24 h-24 bg-[#222831] rounded-full flex items-center justify-center mb-4">
-              <FiShoppingCart className="text-[#00ADB5] text-3xl" />
+          <div className="cart-empty-state">
+            <div className="cart-empty-icon-container">
+              <FiShoppingCart className="cart-empty-icon" />
             </div>
-            <h3 className="text-xl font-medium text-[#EEEEEE]">Your cart is empty</h3>
-            <p className="text-[#b5b5b5] mt-4">
+            <h3 className="cart-empty-text">Your cart is empty</h3>
+            <p className="cart-empty-message">
               <Link 
                 to="/" 
-                className="text-[#00ADB5] hover:underline font-medium"
+                className="cart-empty-link"
               >
                 Discover our products
               </Link>
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="cart-grid">
             {/* Cart Items */}
-            <div className="lg:col-span-2 space-y-4">
+            <div className="cart-items-container">
               {cartItems.map((item) => (
                 <div 
                   key={item.id} 
-                  className="bg-[#393E46] rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
+                  className="cart-item-card"
                 >
-                  <div className="p-4 flex flex-col sm:flex-row">
+                  <div className="cart-item-content">
                     {/* Product Image */}
-                    <div className="w-full sm:w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg bg-[#222831]">
+                    <div className="cart-item-image-container">
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="w-full h-full object-contain p-2"
+                        className="cart-item-image"
                       />
                     </div>
                     
                     {/* Product Info */}
-                    <div className="mt-4 sm:mt-0 sm:ml-6 flex-1">
-                      <div className="flex justify-between">
+                    <div className="cart-item-details">
+                      <div className="cart-item-header">
                         <div>
-                          <h3 className="text-lg font-semibold text-[#EEEEEE]">{item.name}</h3>
-                          <p className="text-[#b5b5b5] text-sm capitalize">{item.category}</p>
+                          <h3 className="cart-item-name">{item.name}</h3>
+                          <p className="cart-item-category">{item.category}</p>
                         </div>
-                        <p className="text-lg font-semibold text-[#00ADB5]">${item.price}</p>
+                        <p className="cart-item-price">${item.price}</p>
                       </div>
                       
                       {/* Quantity Controls */}
-                      <div className="flex items-center justify-between mt-6">
-                        <div className="flex items-center">
+                      <div className="cart-item-controls">
+                        <div className="cart-quantity-control">
                           <button
                             onClick={() => handleQuantityUpdate(item, -1)}
                             disabled={loadingQuantityIds.includes(item.id) || loadingRemoveIds.includes(item.id)}
-                            className={`p-2 rounded-l-lg ${
-                              loadingQuantityIds.includes(item.id) 
-                                ? 'bg-[#222831] text-[#b5b5b5]' 
-                                : 'bg-[#222831] hover:bg-[#00ADB5] text-[#EEEEEE]'
-                            } transition-colors`}
+                            className="cart-quantity-button"
                           >
                             <FiMinus />
                           </button>
-                          <span className="px-4 py-2 bg-[#222831] text-[#EEEEEE]">
+                          <span className="cart-quantity-display">
                             {loadingQuantityIds.includes(item.id) ? (
-                              <span className="inline-block h-4 w-4 border-2 border-[#00ADB5] border-t-transparent rounded-full animate-spin"></span>
+                              <span className="cart-loading-spinner"></span>
                             ) : (
                               item.quantity
                             )}
@@ -169,11 +161,7 @@ const Cart = () => {
                           <button
                             onClick={() => handleQuantityUpdate(item, 1)}
                             disabled={loadingQuantityIds.includes(item.id) || loadingRemoveIds.includes(item.id)}
-                            className={`p-2 rounded-r-lg ${
-                              loadingQuantityIds.includes(item.id) 
-                                ? 'bg-[#222831] text-[#b5b5b5]' 
-                                : 'bg-[#222831] hover:bg-[#00ADB5] text-[#EEEEEE]'
-                            } transition-colors`}
+                            className="cart-quantity-button"
                           >
                             <FiPlus />
                           </button>
@@ -183,20 +171,16 @@ const Cart = () => {
                         <button
                           onClick={() => handleRemove(item.id)}
                           disabled={loadingRemoveIds.includes(item.id) || loadingQuantityIds.includes(item.id)}
-                          className={`flex items-center px-3 py-2 rounded-lg ${
-                            loadingRemoveIds.includes(item.id)
-                              ? 'bg-[#222831] text-[#b5b5b5]'
-                              : 'bg-[#222831] hover:bg-red-500 text-[#EEEEEE]'
-                          } transition-colors`}
+                          className="cart-remove-button"
                         >
                           {loadingRemoveIds.includes(item.id) ? (
-                            <>
-                              <span className="inline-block h-4 w-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin mr-2"></span>
+                            <span className="cart-processing-text">
+                              <span className="cart-loading-spinner"></span>
                               Removing
-                            </>
+                            </span>
                           ) : (
                             <>
-                              <FiTrash2 className="mr-2" />
+                              <FiTrash2 className="cart-remove-icon" />
                               Remove
                             </>
                           )}
@@ -209,67 +193,56 @@ const Cart = () => {
             </div>
 
             {/* Order Summary */}
-            <div className="lg:col-span-1">
-              <div className="bg-[#393E46] rounded-xl shadow-lg p-6 sticky top-4">
-                <h2 className="text-xl font-bold text-[#EEEEEE] mb-6 pb-2 border-b border-[#222831]">
-                  Order Summary
-                </h2>
-                
-                <div className="space-y-4 mb-6">
-                  <div className="flex justify-between">
-                    <span className="text-[#b5b5b5]">Items ({calculateItemCount()}):</span>
-                    <span className="text-[#EEEEEE] font-medium">
-                      ${calculateTotal().toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[#b5b5b5]">Shipping:</span>
-                    <span className="text-[#EEEEEE] font-medium">FREE</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[#b5b5b5]">Tax:</span>
-                    <span className="text-[#EEEEEE] font-medium">Calculated at checkout</span>
-                  </div>
+            <div className="cart-summary">
+              <h2 className="cart-summary-title">
+                Order Summary
+              </h2>
+              
+              <div className="cart-summary-details">
+                <div className="cart-summary-row">
+                  <span className="cart-summary-label">Items ({calculateItemCount()}):</span>
+                  <span className="cart-summary-value">
+                    ${calculateTotal().toFixed(2)}
+                  </span>
                 </div>
-                
-                <div className="py-4 border-t border-b border-[#222831] mb-6">
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-[#EEEEEE]">Total</span>
-                    <span className="text-2xl font-bold text-[#00ADB5]">
-                      ${calculateTotal().toFixed(2)}
-                    </span>
-                  </div>
+                <div className="cart-summary-row">
+                  <span className="cart-summary-label">Shipping:</span>
+                  <span className="cart-summary-value">FREE</span>
                 </div>
-                
-                <button
-                  className={`w-full py-3 px-4 rounded-lg font-bold transition-colors flex items-center justify-center ${
-                    cartItems.length === 0 || isProcessing
-                      ? 'bg-[#393E46] text-[#b5b5b5] cursor-not-allowed'
-                      : 'bg-[#00ADB5] hover:bg-[#008E9B] text-[#EEEEEE]'
-                  }`}
-                  disabled={cartItems.length === 0 || isProcessing}
-                  onClick={() => navigate('/checkout')}
-                >
-                  {isProcessing ? (
-                    <>
-                      <span className="inline-block h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <FiCheck className="mr-2" />
-                      Proceed to Checkout
-                    </>
-                  )}
-                </button>
-                
-                <div className="mt-4 flex items-center text-[#b5b5b5] text-sm">
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span>Express checkout available</span>
+                <div className="cart-summary-row">
+                  <span className="cart-summary-label">Tax:</span>
+                  <span className="cart-summary-value">Calculated at checkout</span>
                 </div>
               </div>
+              
+              <div className="cart-summary-total">
+                <div className="cart-summary-row">
+                  <span className="cart-summary-total-label">Total</span>
+                  <span className="cart-summary-total-value">
+                    ${calculateTotal().toFixed(2)}
+                  </span>
+                </div>
+              </div>
+              
+              <button
+                className="cart-checkout-button"
+                disabled={cartItems.length === 0 || isProcessing}
+                onClick={() => navigate('/checkout')}
+              >
+                {isProcessing ? (
+                  <span className="cart-processing-text">
+                    <span className="cart-loading-spinner"></span>
+                    Processing...
+                  </span>
+                ) : (
+                  <>
+                    <FiCheck className="cart-checkout-icon" />
+                    Proceed to Checkout
+                  </>
+                )}
+              </button>
+              
+              
             </div>
           </div>
         )}

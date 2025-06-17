@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchProducts } from '../../firebaseService';
 import { useCart } from '../Componenets/CartContext';
 import { FiShoppingCart, FiStar, FiChevronRight, FiHome, FiFilter, FiHeart } from 'react-icons/fi';
-
+import "../App.css"
 const ItemsPage = () => {
   const { category } = useParams();
   const [items, setItems] = useState([]);
@@ -70,26 +70,26 @@ const ItemsPage = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center   bg-[#222831] min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00ADB5]"></div>
-        <p className="mt-4 text-[#EEEEEE]">Loading {category} collection...</p>
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p className="loading-text">Loading {category} collection...</p>
       </div>
     );
   }
 
   if (items.length === 0) {
     return (
-      <div className="text-center py-16 bg-[#222831]">
-        <div className="mx-auto w-24 h-24 bg-[#393E46] rounded-full flex items-center justify-center mb-4">
-          <FiShoppingCart className="text-[#00ADB5] text-3xl" />
+      <div className="empty-state">
+        <div className="empty-icon-container">
+          <FiShoppingCart className="empty-icon" />
         </div>
-        <h3 className="text-xl font-medium text-[#EEEEEE]">No {category} available</h3>
-        <p className="text-[#b5b5b5] mt-2">We're restocking soon!</p>
+        <h3 className="empty-title">No {category} available</h3>
+        <p className="empty-text">We're restocking soon!</p>
         <button 
           onClick={() => navigate('/')}
-          className="mt-6 px-6 py-2 bg-[#00ADB5] text-[#EEEEEE] rounded-lg hover:bg-[#008E9B] transition-colors flex items-center mx-auto"
+          className="empty-button"
         >
-          <FiHome className="mr-2" />
+          <FiHome className="empty-button-icon" />
           Back to Home
         </button>
       </div>
@@ -97,27 +97,27 @@ const ItemsPage = () => {
   }
 
   return (
-    <div className="bg-[#222831] min-h-screen py-8">
-      <div className="container mx-auto px-4 sm:px-6">
+    <div className="items-container">
+      <div className="items-inner-container">
         {/* Breadcrumb and Title */}
         <div className="mb-8">
-          <nav className="flex items-center text-sm text-[#b5b5b5] mb-4">
+          <nav className="breadcrumb">
             <button 
               onClick={() => navigate('/')} 
-              className="hover:text-[#00ADB5] flex items-center"
+              className="breadcrumb-button"
             >
-              <FiHome className="mr-1" /> Home
+              <FiHome className="breadcrumb-icon" /> Home
             </button>
-            <FiChevronRight className="mx-2 text-[#393E46]" />
-            <span className="font-medium text-[#00ADB5] capitalize">{category}</span>
+            <FiChevronRight className="breadcrumb-separator" />
+            <span className="breadcrumb-current">{category}</span>
           </nav>
           
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+          <div className="page-header">
             <div>
-              <h1 className="text-3xl font-bold text-[#EEEEEE] capitalize">
+              <h1 className="page-title">
                 {category} Collection
               </h1>
-              <p className="text-[#b5b5b5] mt-1">
+              <p className="page-subtitle">
                 Showing {filteredItems.length} {filteredItems.length === 1 ? 'item' : 'items'}
                 {activeFilter !== 'All' && ` in ${activeFilter}`}
               </p>
@@ -126,20 +126,18 @@ const ItemsPage = () => {
         </div>
 
         {/* Subcategory Filters */}
-        <div className="mb-8">
-          <div className="flex items-center mb-3 text-[#EEEEEE]">
-            <FiFilter className="mr-2 text-[#00ADB5]" />
-            <span className="font-medium">Filter by:</span>
+        <div className="filter-section">
+          <div className="filter-header">
+            <FiFilter className="filter-icon" />
+            <span className="filter-title">Filter by:</span>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="filter-buttons">
             {(subCategories[category.toLowerCase()] || ['All']).map((filter) => (
               <button
                 key={filter}
                 onClick={() => handleFilterClick(filter)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  activeFilter === filter
-                    ? 'bg-[#00ADB5] text-[#EEEEEE]'
-                    : 'bg-[#393E46] text-[#b5b5b5] hover:bg-[#00ADB5]/50 hover:text-[#EEEEEE]'
+                className={`filter-button ${
+                  activeFilter === filter ? 'filter-button-active' : 'filter-button-inactive'
                 }`}
               >
                 {filter}
@@ -147,99 +145,99 @@ const ItemsPage = () => {
             ))}
           </div>
         </div>
-  {/* Modern Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+        {/* Modern Product Grid */}
+        <div className="product-grid">
           {filteredItems.map((item) => (
             <div 
               key={item.id} 
-              className="group relative bg-[#393E46] rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              className="product-card"
             >
               {/* Product Image with Hover Actions */}
               <div 
-                className="relative h-72 overflow-hidden cursor-pointer"
+                className="product-image-container"
                 onClick={() => handleProductClick(item.id)}
               >
                 <img 
                   src={item.image} 
                   alt={item.name} 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="product-image"
                 />
                 
                 {/* Badges */}
-                <div className="absolute top-3 left-3 flex flex-col space-y-2">
+                <div className="product-badges">
                   {item.isNew && (
-                    <span className="bg-[#00ADB5] text-[#EEEEEE] text-xs px-2 py-1 rounded-full shadow-md">
+                    <span className="product-badge badge-new">
                       New
                     </span>
                   )}
                   {item.discount && (
-                    <span className="bg-[#EEEEEE] text-[#222831] text-xs px-2 py-1 rounded-full shadow-md font-bold">
+                    <span className="product-badge badge-discount">
                       -{item.discount}%
                     </span>
                   )}
                 </div>
                 
                 {/* Quick Actions */}
-                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <button className="p-2 bg-[#393E46]/90 rounded-full backdrop-blur-sm text-[#EEEEEE] hover:text-[#00ADB5] transition-colors">
+                <div className="quick-actions">
+                  <button className="wishlist-button">
                     <FiHeart />
                   </button>
                 </div>
               </div>
 
               {/* Product Info */}
-              <div className="p-4">
-                <div className="flex justify-between items-start mb-2">
+              <div className="product-info">
+                <div className="product-header">
                   <div>
                     <h3 
-                      className="text-lg font-semibold text-[#EEEEEE] hover:text-[#00ADB5] transition-colors cursor-pointer line-clamp-1"
+                      className="product-name"
                       onClick={() => handleProductClick(item.id)}
                     >
                       {item.name}
                     </h3>
-                    <p className="text-[#b5b5b5] text-xs uppercase tracking-wider">
+                    <p className="product-category">
                       {item.subcategory || item.category}
                     </p>
                   </div>
                   {item.rating && (
-                    <div className="flex items-center space-x-1 bg-[#222831]/80 px-2 py-1 rounded-full text-xs">
-                      <FiStar className="text-yellow-400 fill-yellow-400" />
-                      <span className="text-[#EEEEEE]">{item.rating}</span>
+                    <div className="product-rating">
+                      <FiStar className="rating-icon" />
+                      <span className="rating-value">{item.rating}</span>
                     </div>
                   )}
                 </div>
 
                 {/* Price and Add to Cart */}
-                <div className="mt-4 flex justify-between items-center">
+                <div className="product-footer">
                   <div>
-                    <span className="text-xl font-bold text-[#00ADB5]">
-                      ${item.price  }
+                    <span className="product-price">
+                      ${item.price}
                     </span>
                     {item.originalPrice && (
-                      <span className="text-sm text-[#b5b5b5] line-through ml-2">
-                        ${item.originalPrice  }
+                      <span className="original-price">
+                        ${item.originalPrice}
                       </span>
                     )}
                   </div>
                   <button 
-                    className="p-2 bg-[#00ADB5] text-[#EEEEEE] rounded-lg hover:bg-[#008E9B] transition-colors flex items-center justify-center"
+                    className="add-to-cart"
                     onClick={(e) => handleAddToCart(e, item)}
                   >
-                    <FiShoppingCart className="text-lg" />
+                    <FiShoppingCart className="cart-icon" />
                   </button>
                 </div>
               </div>
 
               {/* Hover Details Panel */}
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#222831] to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                <p className="text-[#EEEEEE] text-sm line-clamp-2">
+              <div className="hover-details">
+                <p className="product-description">
                   {item.description || 'Premium quality product with excellent craftsmanship.'}
                 </p>
               </div>
             </div>
           ))}
         </div>
-       
       </div>
     </div>
   );
