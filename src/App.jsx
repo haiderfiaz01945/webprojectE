@@ -5,7 +5,6 @@ import { onAuthStateChanged } from 'firebase/auth';
 import NavBar from './Componenets/NavBar';
 import MainPage from './Pages/MainPage';
 import AdminSite from './Componenets/AdminSite';
-import Cart from './Componenets/Cart';
 import Login from './Pages/Login';
 import Signup from './Componenets/SignUp';
 import Checkout from './Pages/Checkout';
@@ -13,10 +12,13 @@ import ItemsPage from './Pages/ItemsPage';
 import ProductPage from './Pages/Product';
 import Orders from './Componenets/Orders';
 import { auth } from '../firebase';
+import Cart from './Pages/Cart';
 const App = () => {
   const [user, setUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(false);
-
+useEffect(()=>{
+  
+})
   // ✅ Add both admin emails here
   const adminEmails = ['haiderfiaz09@gmail.com',"namratariq20@gmail.com"];
 

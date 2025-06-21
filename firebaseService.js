@@ -6,6 +6,7 @@ const CART_COLLECTION = "Cart";  // use a constant for reusability
 const CHECKOUT_COLLECTION = "Checkout"
 export const addData = async (product) => {
   await addDoc(collection(db, COLLECTION_NAME), product);
+  
 };
 
 
@@ -22,6 +23,8 @@ export const fetchCheckout = async () => {
     id: doc.id,
     ...doc.data(),
   }));
+
+  
 };
 
 

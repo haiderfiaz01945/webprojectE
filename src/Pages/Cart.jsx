@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCart } from './CartContext';
 import { auth } from '../../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FiShoppingCart, FiTrash2, FiPlus, FiMinus, FiArrowLeft, FiCheck } from 'react-icons/fi';
+import { useCart } from '../Componenets/CartContext';
+import "../App.css"
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity } = useCart();

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../Componenets/CartContext';
 import { addDataCheckout } from '../../firebaseService';
@@ -13,7 +13,7 @@ const PAKISTAN_CITIES = [
 ];
 
 const Checkout = () => {
-  const { cartItems} = useCart();
+  const { cartItems } = useCart();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -89,16 +89,16 @@ const Checkout = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#222831] p-4">
-        <div className="text-center max-w-md">
-          <div className="mx-auto w-24 h-24 bg-[#393E46] rounded-full flex items-center justify-center mb-4">
-            <FiShoppingCart className="text-[#00ADB5] text-3xl" />
+      <div className="checkout__empty-container">
+        <div className="checkout__empty-content">
+          <div className="checkout__empty-icon-container">
+            <FiShoppingCart className="checkout__empty-icon" />
           </div>
-          <h2 className="text-2xl font-bold text-[#EEEEEE] mb-4">Your cart is empty</h2>
-          <p className="text-[#b5b5b5] mb-6">There are no items to checkout.</p>
+          <h2 className="checkout__empty-title">Your cart is empty</h2>
+          <p className="checkout__empty-text">There are no items to checkout.</p>
           <button 
             onClick={() => navigate('/')}
-            className="bg-[#00ADB5] text-[#EEEEEE] px-6 py-3 rounded-lg hover:bg-[#008E9B] transition-colors"
+            className="checkout__empty-button"
           >
             Continue Shopping
           </button>
@@ -108,23 +108,23 @@ const Checkout = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#222831] py-8 px-4 sm:px-6 relative">
+    <div className="checkout__container">
       {/* Confirmation Dialog */}
       {showConfirmDialog && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <div className="bg-[#393E46] p-6 rounded-xl shadow-xl max-w-md w-full border border-[#393E46]/50">
-            <h3 className="text-xl font-semibold text-[#EEEEEE] mb-4">Confirm Your Order</h3>
-            <p className="mb-6 text-[#b5b5b5]">Are you sure you want to place this order?</p>
-            <div className="flex justify-end space-x-4">
+        <div className="checkout__dialog-overlay">
+          <div className="checkout__dialog-container">
+            <h3 className="checkout__dialog-title">Confirm Your Order</h3>
+            <p className="checkout__dialog-text">Are you sure you want to place this order?</p>
+            <div className="checkout__dialog-buttons">
               <button
                 onClick={() => setShowConfirmDialog(false)}
-                className="px-4 py-2 border border-[#393E46] text-[#EEEEEE] rounded-lg hover:bg-[#393E46] transition-colors"
+                className="checkout__dialog-cancel"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmOrder}
-                className="px-4 py-2 bg-[#00ADB5] text-[#EEEEEE] rounded-lg hover:bg-[#008E9B] transition-colors"
+                className="checkout__dialog-confirm"
               >
                 Confirm Order
               </button>
@@ -135,15 +135,15 @@ const Checkout = () => {
 
       {/* Thank You Message */}
       {showThankYou && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <div className="bg-[#393E46] p-8 rounded-xl shadow-xl max-w-md w-full text-center border border-[#393E46]/50">
-            <div className="mx-auto w-16 h-16 bg-[#00ADB5]/10 rounded-full flex items-center justify-center mb-4">
-              <FiCheck className="text-[#00ADB5] text-3xl" />
+        <div className="checkout__thankyou-overlay">
+          <div className="checkout__thankyou-container">
+            <div className="checkout__thankyou-icon-container">
+              <FiCheck className="checkout__thankyou-icon" />
             </div>
-            <h3 className="text-xl font-semibold mb-2 text-[#EEEEEE]">Thank You!</h3>
-            <p className="text-[#b5b5b5] mb-6">Your order has been placed successfully.</p>
-            <div className="flex justify-center">
-              <div className="w-8 h-8 border-4 border-[#00ADB5] border-t-transparent rounded-full animate-spin"></div>
+            <h3 className="checkout__thankyou-title">Thank You!</h3>
+            <p className="checkout__thankyou-text">Your order has been placed successfully.</p>
+            <div className="checkout__thankyou-spinner-container">
+              <div className="checkout__thankyou-spinner"></div>
             </div>
           </div>
         </div>
@@ -151,53 +151,53 @@ const Checkout = () => {
 
       {/* Loading Overlay */}
       {loading && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-40">
-          <div className="flex flex-col items-center">
-            <div className="w-12 h-12 border-4 border-[#00ADB5] border-t-transparent rounded-full animate-spin mb-4"></div>
-            <p className="text-[#EEEEEE]">Processing your order...</p>
+        <div className="checkout__loading-overlay">
+          <div className="checkout__loading-content">
+            <div className="checkout__loading-spinner"></div>
+            <p className="checkout__loading-text">Processing your order...</p>
           </div>
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-[#EEEEEE] mb-8">Checkout</h1>
+      <div className="checkout__inner-container">
+        <h1 className="checkout__title">Checkout</h1>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="checkout__grid">
           {/* Shipping Information Form */}
-          <div className="bg-[#393E46] p-6 rounded-xl shadow-lg border border-[#393E46]/50">
-            <h2 className="text-xl font-semibold text-[#EEEEEE] mb-6 flex items-center">
-              <FiUser className="mr-2 text-[#00ADB5]" />
+          <div className="checkout__form-container">
+            <h2 className="checkout__form-title">
+              <FiUser className="checkout__form-icon" />
               Shipping Information
             </h2>
             <form onSubmit={handleCheckoutClick}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+              <div className="checkout__form-grid">
                 <div>
-                  <label className=" text-sm font-medium text-[#EEEEEE] mb-2">First Name*</label>
+                  <label className="checkout__form-label">First Name*</label>
                   <input
                     type="text"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
                     required
-                    className="w-full p-3 bg-[#222831] border border-[#222831] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] text-[#EEEEEE] placeholder-[#b5b5b5]"
+                    className="checkout__form-input"
                   />
                 </div>
                 <div>
-                  <label className=" text-sm font-medium text-[#EEEEEE] mb-2">Last Name*</label>
+                  <label className="checkout__form-label">Last Name*</label>
                   <input
                     type="text"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
                     required
-                    className="w-full p-3 bg-[#222831] border border-[#222831] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] text-[#EEEEEE] placeholder-[#b5b5b5]"
+                    className="checkout__form-input"
                   />
                 </div>
               </div>
 
-              <div className="mb-5">
-                <label className=" text-sm font-medium text-[#EEEEEE] mb-2 flex items-center">
-                  <FiMail className="mr-2 text-[#00ADB5]" />
+              <div className="checkout__form-group">
+                <label className="checkout__form-label">
+                  <FiMail className="checkout__form-icon" />
                   Email*
                 </label>
                 <input
@@ -206,13 +206,13 @@ const Checkout = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full p-3 bg-[#222831] border border-[#222831] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] text-[#EEEEEE] placeholder-[#b5b5b5]"
+                  className="checkout__form-input"
                 />
               </div>
 
-              <div className="mb-5">
-                <label className=" text-sm font-medium text-[#EEEEEE] mb-2 flex items-center">
-                  <FiPhone className="mr-2 text-[#00ADB5]" />
+              <div className="checkout__form-group">
+                <label className="checkout__form-label">
+                  <FiPhone className="checkout__form-icon" />
                   Phone Number*
                 </label>
                 <input
@@ -221,13 +221,13 @@ const Checkout = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   required
-                  className="w-full p-3 bg-[#222831] border border-[#222831] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] text-[#EEEEEE] placeholder-[#b5b5b5]"
+                  className="checkout__form-input"
                 />
               </div>
 
-              <div className="mb-5">
-                <label className=" text-sm font-medium text-[#EEEEEE] mb-2 flex items-center">
-                  <FiMapPin className="mr-2 text-[#00ADB5]" />
+              <div className="checkout__form-group">
+                <label className="checkout__form-label">
+                  <FiMapPin className="checkout__form-icon" />
                   Address*
                 </label>
                 <textarea
@@ -235,57 +235,57 @@ const Checkout = () => {
                   value={formData.address}
                   onChange={handleChange}
                   required
-                  className="w-full p-3 bg-[#222831] border border-[#222831] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] text-[#EEEEEE] placeholder-[#b5b5b5]"
+                  className="checkout__form-textarea"
                   rows="3"
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+              <div className="checkout__form-grid">
                 <div>
-                  <label className=" text-sm font-medium text-[#EEEEEE] mb-2">City*</label>
+                  <label className="checkout__form-label">City*</label>
                   <select
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
                     required
-                    className="w-full p-3 bg-[#222831] border border-[#222831] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] text-[#EEEEEE]"
+                    className="checkout__form-select"
                   >
-                    <option value="" className="bg-[#393E46]">Select City</option>
+                    <option value="" className="checkout__form-option">Select City</option>
                     {PAKISTAN_CITIES.map(city => (
-                      <option key={city} value={city} className="bg-[#393E46]">{city}</option>
+                      <option key={city} value={city} className="checkout__form-option">{city}</option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className=" text-sm font-medium text-[#EEEEEE] mb-2">Postal Code</label>
+                  <label className="checkout__form-label">Postal Code</label>
                   <input
                     type="text"
                     name="postalCode"
                     value={formData.postalCode}
                     onChange={handleChange}
-                    className="w-full p-3 bg-[#222831] border border-[#222831] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] text-[#EEEEEE] placeholder-[#b5b5b5]"
+                    className="checkout__form-input"
                   />
                 </div>
               </div>
 
-              <div className="mb-6">
-                <label className=" text-sm font-medium text-[#EEEEEE] mb-3 flex items-center">
-                  <FiCreditCard className="mr-2 text-[#00ADB5]" />
+              <div className="checkout__payment-group">
+                <label className="checkout__payment-label">
+                  <FiCreditCard className="checkout__payment-icon" />
                   Payment Method*
                 </label>
-                <div className="space-y-3">
-                  <label className="flex items-center text-[#EEEEEE]">
+                <div className="checkout__payment-options">
+                  <label className="checkout__payment-option">
                     <input
                       type="radio"
                       name="paymentMethod"
                       value="cashOnDelivery"
                       checked={formData.paymentMethod === 'cashOnDelivery'}
                       onChange={handleChange}
-                      className="mr-3 h-4 w-4 text-[#00ADB5] focus:ring-[#00ADB5] border-[#b5b5b5]"
+                      className="checkout__payment-radio"
                     />
                     Cash on Delivery
                   </label>
-                  <label className="flex items-center text-[#b5b5b5]">
+                  <label className="checkout__payment-option-disabled">
                     <input
                       type="radio"
                       name="paymentMethod"
@@ -293,20 +293,20 @@ const Checkout = () => {
                       checked={formData.paymentMethod === 'creditCard'}
                       onChange={handleChange}
                       disabled
-                      className="mr-3 h-4 w-4 text-[#00ADB5] focus:ring-[#00ADB5] border-[#b5b5b5]"
+                      className="checkout__payment-radio"
                     />
                     Credit Card (Coming Soon)
                   </label>
                 </div>
               </div>
 
-              <div className="mb-6">
-                <label className=" text-sm font-medium text-[#EEEEEE] mb-2">Order Notes</label>
+              <div className="checkout__notes-group">
+                <label className="checkout__notes-label">Order Notes</label>
                 <textarea
                   name="notes"
                   value={formData.notes}
                   onChange={handleChange}
-                  className="w-full p-3 bg-[#222831] border border-[#222831] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] text-[#EEEEEE] placeholder-[#b5b5b5]"
+                  className="checkout__notes-textarea"
                   rows="2"
                   placeholder="Any special instructions..."
                 />
@@ -314,7 +314,7 @@ const Checkout = () => {
 
               <button
                 type="submit"
-                className="w-full bg-[#00ADB5] text-[#EEEEEE] py-3 px-4 rounded-lg hover:bg-[#008E9B] transition-colors font-medium"
+                className="checkout__submit-button"
               >
                 Place Order
               </button>
@@ -322,49 +322,49 @@ const Checkout = () => {
           </div>
 
           {/* Order Summary */}
-          <div className="bg-[#393E46] p-6 rounded-xl shadow-lg border border-[#393E46]/50 h-fit">
-            <h2 className="text-xl font-semibold text-[#EEEEEE] mb-6 flex items-center">
-              <FiShoppingCart className="mr-2 text-[#00ADB5]" />
+          <div className="checkout__summary-container">
+            <h2 className="checkout__summary-title">
+              <FiShoppingCart className="checkout__summary-icon" />
               Order Summary
             </h2>
             
-            <div className="divide-y divide-[#222831]">
-              <div className="py-4">
+            <div className="checkout__summary-divider">
+              <div className="checkout__summary-items">
                 {cartItems.map(item => (
-                  <div key={item.id} className="flex items-center justify-between py-4">
-                    <div className="flex items-center">
-                      <div className="w-16 h-16 flex-shrink-0 overflow-hidden rounded-md border border-[#222831] bg-[#222831]">
+                  <div key={item.id} className="checkout__summary-item">
+                    <div className="checkout__item-container">
+                      <div className="checkout__item-image-container">
                         <img
                           src={item.image}
                           alt={item.name}
-                          className="w-full h-full object-contain p-1"
+                          className="checkout__item-image"
                         />
                       </div>
-                      <div className="ml-4">
-                        <h3 className="text-sm font-medium text-[#EEEEEE]">{item.name}</h3>
-                        <p className="text-xs text-[#b5b5b5]">Qty: {item.quantity}</p>
+                      <div className="checkout__item-details">
+                        <h3 className="checkout__item-name">{item.name}</h3>
+                        <p className="checkout__item-quantity">Qty: {item.quantity}</p>
                       </div>
                     </div>
-                    <span className="font-medium text-[#EEEEEE]">${(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="checkout__item-price">${(item.price * item.quantity).toFixed(2)}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="py-4">
-                <div className="flex justify-between py-2">
-                  <span className="text-[#b5b5b5]">Subtotal</span>
-                  <span className="text-[#EEEEEE]">${subtotal.toFixed(2)}</span>
+              <div className="checkout__summary-totals">
+                <div className="checkout__total-row">
+                  <span className="checkout__total-label">Subtotal</span>
+                  <span className="checkout__total-value">${subtotal.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between py-2">
-                  <span className="text-[#b5b5b5]">Delivery Fee</span>
-                  <span className="text-[#EEEEEE]">${deliveryCharge.toFixed(2)}</span>
+                <div className="checkout__total-row">
+                  <span className="checkout__total-label">Delivery Fee</span>
+                  <span className="checkout__total-value">${deliveryCharge.toFixed(2)}</span>
                 </div>
               </div>
 
-              <div className="py-4">
-                <div className="flex justify-between items-center">
-                  <span className="font-bold text-lg text-[#EEEEEE]">Total</span>
-                  <span className="font-bold text-xl text-[#00ADB5]">${total.toFixed(2)}</span>
+              <div className="checkout__grand-total">
+                <div className="checkout__grand-total-row">
+                  <span className="checkout__grand-total-label">Total</span>
+                  <span className="checkout__grand-total-value">${total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
