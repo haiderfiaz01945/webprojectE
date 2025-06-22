@@ -81,7 +81,7 @@ const ProductPage = () => {
           className="product-back-btn"
         >
           <FiArrowLeft className="product-back-icon" />
-          Back to {product.category}
+          Back to. {product.category}
         </button>
 
         {/* Product Container */}
